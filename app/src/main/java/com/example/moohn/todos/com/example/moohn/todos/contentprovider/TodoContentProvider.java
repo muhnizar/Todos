@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.example.moohn.todos.database.TodoDatabaseHelper;
 import com.example.moohn.todos.database.TodoTable;
@@ -18,7 +20,6 @@ public class TodoContentProvider extends ContentProvider {
 
     private TodoDatabaseHelper databaseHelper;
 
-    private TodoDatabaseHelper todoDatabaseHelper;
     private static final int TODOS = 10;
     private static final int TODO_ID = 20;
 
@@ -26,9 +27,6 @@ public class TodoContentProvider extends ContentProvider {
     private static final String AUTHORITY = "com.example.moohn.todos.contentprovider";
     private static final String BASE_PATH = "todos";
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-
-
 
     static{
         sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
@@ -38,13 +36,13 @@ public class TodoContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        todoDatabaseHelper = new TodoDatabaseHelper(getContext());
+        databaseHelper = new TodoDatabaseHelper(getContext());
         return false;
     }
 
-
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder sqLiteQueryBuilder =  new SQLiteQueryBuilder();
 
@@ -77,9 +75,10 @@ public class TodoContentProvider extends ContentProvider {
         return cursor;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        long id = 0;
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
+        long id;
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         switch (uriType){
@@ -94,27 +93,54 @@ public class TodoContentProvider extends ContentProvider {
         return Uri.parse(BASE_PATH +"/"+id);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        long rowDeleted = 0;
+        int rowDeleted;
         switch (uriType){
             case TODOS:
                rowDeleted = db.delete(TodoTable.TABLE_TODO, selection, selectionArgs);
                break;
             case TODO_ID:
-
-
+                String id = uri.getLastPathSegment();
+                if(TextUtils.isEmpty(selection)){
+                    rowDeleted = db.delete(TodoTable.TABLE_TODO, TodoTable.COLUMN_ID +" = "+id, selectionArgs);
+                }else{
+                    rowDeleted = db.delete(TodoTable.TABLE_TODO, TodoTable.COLUMN_ID +" = "+id +" and " +selection, selectionArgs);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("unknown uri :" +uri);
         }
-
-
-        return 0;
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowDeleted;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        int uriType = sURIMatcher.match(uri);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        int rowUpdated ;
+
+        switch (uriType){
+            case TODOS:
+                rowUpdated = db.update(TodoTable.TABLE_TODO, values, selection, selectionArgs);
+                break;
+            case TODO_ID:
+                String id = uri.getLastPathSegment();
+                if(TextUtils.isEmpty(selection)){
+                    rowUpdated = db.update(TodoTable.TABLE_TODO, values, TodoTable.COLUMN_ID +" = "+id, selectionArgs);
+                }else{
+                    rowUpdated = db.update(TodoTable.TABLE_TODO, values,  TodoTable.COLUMN_ID +" = "+id +" and "+ selection, selectionArgs);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown uri:"+uri);
+
+        }
+        return rowUpdated;
     }
 
     private void checkColumn(String[] projection) {
@@ -123,15 +149,13 @@ public class TodoContentProvider extends ContentProvider {
         HashSet<String> requestColumns = new HashSet<>(Arrays.asList(projection));
         HashSet<String> availableColumns = new HashSet<>(Arrays.asList(available));
 
-        if(projection!= null){
             if (!availableColumns.containsAll(requestColumns)){
                 throw new IllegalArgumentException("Unknown column in projection");
             }
-        }
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 
