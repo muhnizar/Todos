@@ -97,6 +97,17 @@ public class TodoContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long rowDeleted = 0;
+        switch (uriType){
+            case TODOS:
+               rowDeleted = db.delete(TodoTable.TABLE_TODO, selection, selectionArgs);
+               break;
+            case TODO_ID:
+
+
+        }
+
 
         return 0;
     }
