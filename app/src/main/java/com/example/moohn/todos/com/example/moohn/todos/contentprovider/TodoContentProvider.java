@@ -1,6 +1,7 @@
 package com.example.moohn.todos.com.example.moohn.todos.contentprovider;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -27,9 +28,12 @@ public class TodoContentProvider extends ContentProvider {
 
     private static final String AUTHORITY = "com.example.moohn.todos.contentprovider";
     private static final String BASE_PATH = "todos";
-    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/"+BASE_PATH);
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/todos";
+    public static final String CONTENT__ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/todo";
+
+    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static{
         sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
         sURIMatcher.addURI(AUTHORITY, BASE_PATH+"/#", TODO_ID);
