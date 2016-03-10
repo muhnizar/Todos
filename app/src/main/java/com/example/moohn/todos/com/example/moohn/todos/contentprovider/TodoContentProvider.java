@@ -18,6 +18,7 @@ import java.util.HashSet;
 
 public class TodoContentProvider extends ContentProvider {
 
+
     private TodoDatabaseHelper databaseHelper;
 
     private static final int TODOS = 10;
@@ -28,6 +29,7 @@ public class TodoContentProvider extends ContentProvider {
     private static final String BASE_PATH = "todos";
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/"+BASE_PATH);
     static{
         sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
         sURIMatcher.addURI(AUTHORITY, BASE_PATH+"/#", TODO_ID);
