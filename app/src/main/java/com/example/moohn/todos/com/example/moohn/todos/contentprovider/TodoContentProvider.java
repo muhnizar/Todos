@@ -160,6 +160,4 @@ public class TodoContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         return null;
     }
-
-
 }
