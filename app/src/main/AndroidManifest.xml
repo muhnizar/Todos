@@ -15,6 +15,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TodoDetailActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+        <provider
+            android:name=".com.example.moohn.todos.contentprovider.TodoContentProvider"
+            android:authorities=".com.example.moohn.todos.contentprovider" >
+        </provider>
+
     </application>
 
 </manifest>
