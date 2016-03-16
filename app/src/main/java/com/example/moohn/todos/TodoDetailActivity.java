@@ -55,10 +55,11 @@ public class TodoDetailActivity extends Activity{
     }
 
     private void fillData(Uri todoUri) {
-        String[] projection = new String[]{TodoTable.COLUMN_CATEGORY, TodoTable.COLUMN_DESCRIPTION, TodoTable.COLUMN_SUMMARY};
+        String[] projection = { TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION, TodoTable.COLUMN_CATEGORY };
         Cursor cursor = getContentResolver().query(todoUri, projection, null, null, null);
 
         if(cursor != null){
+            cursor.moveToFirst();
             String category = cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
             for (int i=0;i<mCategory.getCount();i++){
                 String item = (String) mCategory.getItemAtPosition(i);

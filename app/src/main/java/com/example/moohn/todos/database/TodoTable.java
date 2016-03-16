@@ -18,7 +18,7 @@ public class TodoTable {
         +COLUMN_ID +" integer primary key autoincrement,"
         +COLUMN_CATEGORY + " text not null, "
         +COLUMN_SUMMARY + " text not null, "
-        +COLUMN_DESCRIPTION + " text not nul); ";
+        +COLUMN_DESCRIPTION + " text not null); ";
 
     public static void oncreate(SQLiteDatabase sqLiteDatabase){
         sqLiteDatabase.execSQL(DATABASE_CREATE);

@@ -97,7 +97,7 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(this, TodoDetailActivity.class);
-        Uri todoUri = Uri.parse(TodoContentProvider.CONTENT__ITEM_TYPE);
+        Uri todoUri = Uri.parse(TodoContentProvider.CONTENT_URI +"/"+ id);
         i.putExtra(TodoContentProvider.CONTENT__ITEM_TYPE,todoUri );
         startActivity(i);
     }

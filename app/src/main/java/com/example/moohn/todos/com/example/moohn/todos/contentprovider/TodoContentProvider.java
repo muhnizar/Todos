@@ -124,6 +124,7 @@ public class TodoContentProvider extends ContentProvider {
         return rowDeleted;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
@@ -146,6 +147,7 @@ public class TodoContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown uri:"+uri);
 
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return rowUpdated;
     }
 
