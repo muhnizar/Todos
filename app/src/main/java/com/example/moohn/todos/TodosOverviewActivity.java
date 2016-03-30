@@ -17,12 +17,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.example.moohn.todos.adapter.TodoCursorAdapter;
 import com.example.moohn.todos.com.example.moohn.todos.contentprovider.TodoContentProvider;
 import com.example.moohn.todos.database.TodoTable;
 
 public class TodosOverviewActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private SimpleCursorAdapter adapter;
+    private TodoCursorAdapter  todoAdapter;
     private static final int DELETE_ID = Menu.FIRST + 1;
 
     @Override
@@ -40,8 +42,8 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
         int[] to = new int[]{R.id.label};
 //      init loader
         getLoaderManager().initLoader(0, null, this);
-        adapter = new SimpleCursorAdapter(this, R.layout.todo_row, null, from,to, 0);
-        setListAdapter(adapter);
+        //adapter = new SimpleCursorAdapter(this, R.layout.todo_row, null, from,to, 0);
+
     }
 
     @Override
@@ -106,7 +108,9 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 //    the asynchronous load is complete and data is available now.
 //    now we can associate with adapter
-      adapter.swapCursor(data);
+        todoAdapter = new TodoCursorAdapter(this, data);
+        setListAdapter(todoAdapter);
+        todoAdapter.swapCursor(data);
     }
 
     @Override
