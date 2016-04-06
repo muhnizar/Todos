@@ -2,8 +2,6 @@ package com.example.moohn.todos.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,15 +30,19 @@ public class TodoCursorAdapter extends CursorAdapter{
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        ImageView star = (ImageView) view.findViewById(R.id.iconStar);
+        ImageView imgPriority = (ImageView) view.findViewById(R.id.priority);
         TextView label = (TextView) view.findViewById(R.id.label);
 
-        Bitmap oriStar = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.reminder);
+        String priority = cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
 
-        Bitmap resizedBitmap =
-                Bitmap.createScaledBitmap(oriStar, 10, 10, false);
+        String[] priorities =  mContext.getResources().getStringArray(R.array.priorities);
 
-        star.setImageBitmap(resizedBitmap);
+        if (priority.equals("Urgent")){
+            imgPriority.setImageResource(R.mipmap.urgent);
+        }else {
+            imgPriority.setImageResource(R.mipmap.reminder);
+        }
+
         label.setText(cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_SUMMARY)));
     }
 }
