@@ -38,8 +38,8 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     }
 
     private void fillData() {
-        String[] from = new String[]{TodoTable.COLUMN_SUMMARY};
-        int[] to = new int[]{R.id.label};
+//        String[] from = new String[]{TodoTable.COLUMN_SUMMARY};
+//        int[] to = new int[]{R.id.label};
 //      init loader
         getLoaderManager().initLoader(0, null, this);
         //adapter = new SimpleCursorAdapter(this, R.layout.todo_row, null, from,to, 0);
@@ -91,7 +91,8 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     //  immediately called after init loader
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection =  {TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY};
+        String[] projection =  {TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_CATEGORY};
+
         return new CursorLoader(this, TodoContentProvider.CONTENT_URI, projection, null, null, null);
     }
 
