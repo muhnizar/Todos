@@ -38,11 +38,8 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     }
 
     private void fillData() {
-//        String[] from = new String[]{TodoTable.COLUMN_SUMMARY};
-//        int[] to = new int[]{R.id.label};
 //      init loader
         getLoaderManager().initLoader(0, null, this);
-        //adapter = new SimpleCursorAdapter(this, R.layout.todo_row, null, from,to, 0);
 
     }
 
