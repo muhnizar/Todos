@@ -1,13 +1,13 @@
 package com.example.moohn.todos;
 
-import android.app.ListActivity;
-import android.app.LoaderManager;
+import android.app.FragmentManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +21,7 @@ import com.example.moohn.todos.adapter.TodoCursorAdapter;
 import com.example.moohn.todos.com.example.moohn.todos.contentprovider.TodoContentProvider;
 import com.example.moohn.todos.database.TodoTable;
 
-public class TodosOverviewActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TodosOverviewActivity extends FragmentActivity {
 
     private SimpleCursorAdapter adapter;
     private TodoCursorAdapter  todoAdapter;
@@ -31,8 +31,15 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todo_list);
-        this.getListView().setDividerHeight(2);
         fillData();
+
+        FragmentManager fm = getFragmentManager();
+        // Create the list fragment and add it as our sole content.
+        if (fm.findFragmentById(android.R.id.content) == null) {
+            CursorLoaderListFragment listFragment = new CursorLoaderListFragment();
+            fm.beginTransaction().add(android.R.id.content, list).commit();
+        }
+
 //        register context menu to the list
         registerForContextMenu(getListView());
     }
@@ -42,6 +49,7 @@ public class TodosOverviewActivity extends ListActivity implements LoaderManager
         getLoaderManager().initLoader(0, null, this);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
