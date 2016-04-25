@@ -3,12 +3,15 @@ package com.example.moohn.todos;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.moohn.todos.adapter.TodoCursorAdapter;
 import com.example.moohn.todos.com.example.moohn.todos.contentprovider.TodoContentProvider;
@@ -29,8 +32,6 @@ public class TodoOverviewFragment extends ListFragment  implements LoaderManager
         getLoaderManager().initLoader(0, null, this);
     }
 
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection =  {TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_CATEGORY};
@@ -42,6 +43,16 @@ public class TodoOverviewFragment extends ListFragment  implements LoaderManager
         todoAdapter = new TodoCursorAdapter(getActivity(), data);
         setListAdapter(todoAdapter);
         todoAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        //Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
+        super.onListItemClick(l, v, position, id);
+        Intent i = new Intent(getActivity(), TodoDetailActivity.class);
+        Uri todoUri = Uri.parse(TodoContentProvider.CONTENT_URI +"/"+ id);
+        i.putExtra(TodoContentProvider.CONTENT__ITEM_TYPE,todoUri );
+        startActivity(i);
     }
 
     @Override

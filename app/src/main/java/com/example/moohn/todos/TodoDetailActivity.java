@@ -2,7 +2,6 @@ package com.example.moohn.todos;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 import com.example.moohn.todos.com.example.moohn.todos.contentprovider.TodoContentProvider;
 import com.example.moohn.todos.database.TodoTable;
 
-public class TodoDetailActivity extends Activity{
+public class TodoDetailActivity extends Activity {
     private Spinner mCategory;
     private EditText mSummary;
     private EditText mDescription;
@@ -24,7 +23,7 @@ public class TodoDetailActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_edit);
+        setContentView(R.layout.todo_edit_fragment);
         
         mCategory =(Spinner) findViewById(R.id.category);
         mSummary = (EditText) findViewById(R.id.todo_edit_summary);
@@ -34,8 +33,10 @@ public class TodoDetailActivity extends Activity{
         Bundle extra = getIntent().getExtras();
 
         if (extra != null ){
+
+            TodoDetailFragment detailFragment = (TodoDetailFragment) getFragmentManager().findFragmentById(R.id.detailFragment);
             todoUri = extra.getParcelable(TodoContentProvider.CONTENT__ITEM_TYPE);
-            fillData(todoUri);
+            detailFragment.fillData(todoUri);
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener(){
@@ -52,26 +53,6 @@ public class TodoDetailActivity extends Activity{
         });
 
 
-    }
-
-    private void fillData(Uri todoUri) {
-        String[] projection = { TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION, TodoTable.COLUMN_CATEGORY };
-        Cursor cursor = getContentResolver().query(todoUri, projection, null, null, null);
-
-        if(cursor != null){
-            cursor.moveToFirst();
-            String category = cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
-            for (int i=0;i<mCategory.getCount();i++){
-                String item = (String) mCategory.getItemAtPosition(i);
-                if (item.equalsIgnoreCase(category)){
-                    mCategory.setSelection(i);
-                }
-            }
-            mSummary.setText(cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_SUMMARY)));
-            mDescription.setText(cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_DESCRIPTION)));
-//    dont forfet to close the cursor
-            cursor.close();
-        }
     }
 
     @Override
