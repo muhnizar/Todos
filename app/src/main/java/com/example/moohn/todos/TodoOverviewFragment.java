@@ -47,7 +47,6 @@ public class TodoOverviewFragment extends ListFragment  implements LoaderManager
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        //Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(getActivity(), TodoDetailActivity.class);
         Uri todoUri = Uri.parse(TodoContentProvider.CONTENT_URI +"/"+ id);

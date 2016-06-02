@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +14,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.moohn.todos.com.example.moohn.todos.contentprovider.TodoContentProvider;
 import com.example.moohn.todos.database.TodoTable;
 
 public class TodoDetailFragment extends Fragment implements View.OnClickListener{
     private Spinner mCategory;
     private EditText mSummary;
     private EditText mDescription;
-    private Uri todoUri;
     private Button button;
 
-    @Nullable
+    public Uri getTodoURI(){
+        return getArguments().getParcelable(TodoContentProvider.CONTENT__ITEM_TYPE);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.todo_edit_fragment, container, false);
@@ -33,16 +35,21 @@ public class TodoDetailFragment extends Fragment implements View.OnClickListener
         mDescription = (EditText) view.findViewById(R.id.todo_edit_description);
         button = (Button) view.findViewById(R.id.todo_edit_button);
         button.setOnClickListener(this);
-
+        fillData(getTodoURI());
         return view;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
 
     protected void fillData(Uri todoUri) {
         String[] projection = { TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION, TodoTable.COLUMN_CATEGORY };
-        Cursor cursor = getActivity().getContentResolver().query(todoUri, projection, null, null, null);
+        Cursor cursor =  getActivity().getContentResolver().query(todoUri, projection, null, null, null);
 
-        if(cursor != null){
+        if(cursor !=  null){
             cursor.moveToFirst();
             String category = cursor.getString(cursor.getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
             for (int i=0;i<mCategory.getCount();i++){
@@ -56,7 +63,6 @@ public class TodoDetailFragment extends Fragment implements View.OnClickListener
             cursor.close();
         }
     }
-
 
     @Override
     public void onClick(View v) {
