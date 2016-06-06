@@ -16,7 +16,6 @@ public class TodoDetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_edit_fragment);
         detailFragment = (TodoDetailFragment) getFragmentManager().findFragmentById(R.id.detailFragment);
         if (detailFragment == null ){
             detailFragment = new TodoDetailFragment();
