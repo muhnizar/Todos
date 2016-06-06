@@ -102,6 +102,6 @@ public class TodoDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void makeToast() {
-        Toast.makeText(getActivity(), "Please maintain a summary", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Please maintain a summary", Toast.LENGTH_SHORT).show();
     }
 }

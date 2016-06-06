@@ -22,7 +22,6 @@ public class TodoDetailActivity extends Activity {
             Bundle extra = getIntent().getExtras();
             detailFragment.setArguments(extra);
             getFragmentManager().beginTransaction().add(android.R.id.content, detailFragment).commit();
-
         }
     }
 }
