@@ -95,7 +95,7 @@ public class TodoDetailFragment extends Fragment implements View.OnClickListener
         values.put(TodoTable.COLUMN_SUMMARY,summary);
 
         if( null == getTodoURI()){
-            getActivity().getContentResolver().insert(getTodoURI(),values);
+            getActivity().getContentResolver().insert(TodoContentProvider.CONTENT_URI,values);
         }else {
             getActivity().getContentResolver().update(getTodoURI(),values,null,null);
         }
