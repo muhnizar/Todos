@@ -2,6 +2,7 @@ package com.example.moohn.todos;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -74,6 +75,29 @@ public class TodoDetailFragment extends Fragment implements View.OnClickListener
                     getActivity().setResult(Activity.RESULT_OK);
                     getActivity().finish();
                 }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveState();
+    }
+
+    private void saveState() {
+        String category = (String) mCategory.getSelectedItem();
+        String summary = mSummary.getText().toString();
+        String description = mDescription.getText().toString();
+
+        ContentValues values = new ContentValues();
+        values.put(TodoTable.COLUMN_CATEGORY,category);
+        values.put(TodoTable.COLUMN_DESCRIPTION,description);
+        values.put(TodoTable.COLUMN_SUMMARY,summary);
+
+        if( null == getTodoURI()){
+            getActivity().getContentResolver().insert(getTodoURI(),values);
+        }else {
+            getActivity().getContentResolver().update(getTodoURI(),values,null,null);
         }
     }
 
