@@ -25,10 +25,4 @@ public class TodoDetailActivity extends Activity {
 
         }
     }
-
-/*    @Override
-    protected void onResume() {
-        super.onResume();
-        detailFragment.fillData(todoUri);
-    }*/
 }
